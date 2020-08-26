@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        /**
+         * 装箱：把基本数据类型转化为对应的引用数据类型的操作
+         * **/
+        let s1 = "abc";
+        let s2 = s1.indexOf("a")
+        /**
+         * 1.创建String类型的一个实例；
+           2.在实例上调用指定的方法；
+           3.销毁这个实例；
+         * **/
+
+        /**
+         * 1.创建String类型的一个实例；
+           2.在实例上调用指定的方法；
+           3.销毁这个实例；
+           它是通过引用类型的valueOf()或者toString()方法来实现的。如果是自定义的对象
+           ，你也可以自定义它的valueOf() tostring()方法，实现对这个对象的拆箱。
+         * **/
+        let objNum = new Number(123);
+        let objStr = new String("123");
+        console.log(typeof objNum); //object
+        console.log(typeof objStr); //object 
+        console.log(typeof objNum.valueOf()); //number
+        console.log(typeof objStr.valueOf()); //string
+
+        console.log(typeof objNum.toString()); // string 
+        console.log(typeof objStr.toString()); // string
+
+
+
+        Number（）转换
+        1. 若是字符串，只包含数字包含正负号的话，转化为十进制数字
+        2. 字符串包含有效的浮点数，转换为对应的浮点数
+        3. 如果字符串是十六进制格式，转换为十进制数
+        4. 对象，先valueOf，若是NaN，再toString
+        Number("")=>0 
+        Number([])=>0 
+        Number(null)=>0 
+        Number(undefined)=>NaN 
+        parseInt("")=>NaN 
+        parseInt("dd11")=>NaN 
+        parseInt("11dd")=>11
+        parseInt('123', 5) // 将'123'看作5进制数，返回十进制数38 => 1*5^2 + 2*5^1 + 3*5^0 = 38
+       
+       
+        ++ -- 转换
+        1. 应用包含有效数字字符的字符串，将其转换为数字
+        2. 不包含有效数字字符的字符串，NaN
+        3. 对象，先valueOf，若是NaN，再toString
+
+        + - 转换
+        1. + 如果有一个操作数是对象、数值或布尔值，toString()；若是unfined、null调用String()
+        2. - 操作数是字符串、布尔值、null、undeind，调用Number()；对象，调用valueOf，若是NaN 调用toString()
+
+        < > <= >=
+        1. 对象，valueOf，若没有valueOf方法再toString
+        
+        ==
+        1. 一个是对象，一个不是；valueOf再比较
+        2. 都是对象比较值
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
