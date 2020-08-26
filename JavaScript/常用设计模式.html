@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        /**
+         * 简单工厂模式
+         * **/
+        function User(name, age, career, work) {
+            this.name = name
+            this.age = age
+            this.career = career
+            this.work = work
+        }
+
+        function Factory(name, age, career) {
+            let work;
+            switch (career) {
+                case 'coder':
+                    work = ['写代码', '写系分', '修Bug']
+                    break;
+                case 'product manager':
+                    work = ['订会议室', '写PRD', '催更']
+                    break
+                case 'boss':
+                    work = ['喝茶', '看报', '见客户']
+                    break
+                default:
+                    work = ["家里蹲"]
+                    break
+            }
+            return new User(name, age, career, work);
+        }
+        let f1 = new Factory("qc", 18, "coder");
+        console.log(f1.work);
+
+
+        /**
+         * 抽象工厂模式
+         * **/
+        class MobilePhoneFactory {
+            // 提供操作系统的接口
+            createOS() {
+                throw new Error("抽象工厂方法不允许直接调用，你需要将我重写！");
+            }
+            // 提供硬件的接口
+            createHardWare() {
+                throw new Error("抽象工厂方法不允许直接调用，你需要将我重写！");
+            }
+        }
+        class FakeStarFactory extends MobilePhoneFactory {
+            createOS() {
+                // 提供安卓系统实例
+                return new AndroidOS()
+            }
+            createHardWare() {
+                // 提供高通硬件实例
+                return new QualcommHardWare()
+            }
+        }
+        // 定义操作系统这类产品的抽象产品类
+        class OS {
+            controlHardWare() {
+                throw new Error('抽象产品方法不允许直接调用，你需要将我重写！');
+            }
+        }
+
+        // 定义具体操作系统的具体产品类
+        class AndroidOS extends OS {
+            controlHardWare() {
+                console.log('我会用安卓的方式去操作硬件')
+            }
+        }
+
+        class AppleOS extends OS {
+            controlHardWare() {
+                console.log('我会用🍎的方式去操作硬件')
+            }
+        }
+
+        /**
+         * 单例模式
+         * **/
+        const single = (function () {
+            class Single {
+
+            }
+
+            let single;
+            return {
+                getSingle() {
+                    if (!single) {
+                        single = new Single();
+                    }
+                    return single;
+                }
+            }
+        })();
+        console.log(single.getSingle());
+
+        /**
+         * 发布订阅
+         * **/
+        class EventEmitter {
+            constructor() {
+                this.handlers = {};
+            }
+
+            on(eventName, cb) {
+                if (!this.handlers[eventName]) {
+                    this.handlers[eventName] = [];
+                }
+                this.handlers[eventName].push(cb);
+            }
+
+            emit(eventName, ...args) {
+                if (this.handlers[eventName]) {
+                    this.handlers[eventName].forEach((cb) => {
+                        cb(...args);
+                    })
+                }
+            }
+
+            off(eventName, cb) {
+                const cbs = this.handlers[eventName];
+                const index = cbs.indexOf(cb);
+                if (index !== -1) cbs.splice(index, 1);
+            }
+
+            once(eventName, cb) {
+                const wrapper = (...args) => {
+                    cb.apply(...args);
+                    this.off(eventName, wrapper);
+                }
+                this.on(eventName, wrapper);
+            }
+        }
+
+        /**
+        观察者模式
+        **/
+        class Subscribe {
+            constructor() {
+                this.pond = [];
+            }
+
+            add(fn) {
+                let pond = this.pond,
+                    isExist = false;
+                pond.forEach(item => {
+                        item === fn ? isExist = true : null;
+                    })
+
+                    !isExist ? pond.push(fn) : null;
+            }
+
+            remove(fn) {
+                let pond = this.pond;
+                pond.forEach((item, index) => {
+                    if (item === fn) {
+                        pond[index] = null;
+                        //  pond.splice(index,1) 
+                    }
+                })
+            }
+            fire(...arg) {
+                let pond = this.pond;
+
+                for (let i = 0; i < pond.length; i++) {
+                    let item = pond[i];
+                    if (item === null) {
+                        pond.splice(i, 1);
+                        i--;
+                        continue;
+                    }
+                    item(...arg)
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
